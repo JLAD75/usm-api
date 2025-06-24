@@ -153,6 +153,18 @@ app.get("/token", ensureAuth, (req, res) => {
   res.json({ token });
 });
 
+// Endpoint de vérification de la connexion à la base de données
+app.get("/health/db", (req, res) => {
+  try {
+    const db = openDb();
+    // On fait un SELECT simple sur sqlite_master (toujours présent)
+    db.prepare("SELECT name FROM sqlite_master LIMIT 1").get();
+    res.json({ status: "ok", message: "Connexion à la base de données réussie." });
+  } catch (err) {
+    res.status(500).json({ status: "error", message: err.message });
+  }
+});
+
 // Brancher les routes API projets, user stories, accès, import/export
 app.use(projectsRoutes);
 app.use(userStoriesRoutes);
