@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+	"sql": "npx node-gyp rebuild"
   },
   "dependencies": {
 	"@modelcontextprotocol/sdk": "^1.12.1",
