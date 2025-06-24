@@ -12,7 +12,7 @@ function ensureAuth(req, res, next) {
 }
 
 // Lister les accès d'un projet
-router.get('/api/projects/:projectId/access', ensureAuth, (req, res) => {
+router.get('/projects/:projectId/access', ensureAuth, (req, res) => {
   const db = openDb();
   const userId = req.user.id;
   const { projectId } = req.params;
@@ -26,7 +26,7 @@ router.get('/api/projects/:projectId/access', ensureAuth, (req, res) => {
 });
 
 // Ajouter ou modifier un accès
-router.post('/api/projects/:projectId/access', ensureAuth, (req, res) => {
+router.post('/projects/:projectId/access', ensureAuth, (req, res) => {
   const db = openDb();
   const userId = req.user.id;
   const { projectId } = req.params;
@@ -51,7 +51,7 @@ router.post('/api/projects/:projectId/access', ensureAuth, (req, res) => {
 });
 
 // Supprimer un accès
-router.delete('/api/projects/:projectId/access/:targetUserId', ensureAuth, (req, res) => {
+router.delete('/projects/:projectId/access/:targetUserId', ensureAuth, (req, res) => {
   const db = openDb();
   const userId = req.user.id;
   const { projectId, targetUserId } = req.params;

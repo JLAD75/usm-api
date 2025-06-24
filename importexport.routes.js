@@ -12,7 +12,7 @@ function ensureAuth(req, res, next) {
 }
 
 // Exporter un projet (settings + user stories)
-router.get('/api/projects/:projectId/export', ensureAuth, (req, res) => {
+router.get('/projects/:projectId/export', ensureAuth, (req, res) => {
   const db = openDb();
   const userId = req.user.id;
   const { projectId } = req.params;
@@ -31,7 +31,7 @@ router.get('/api/projects/:projectId/export', ensureAuth, (req, res) => {
 });
 
 // Importer un projet (crée un nouveau projet pour l'utilisateur courant)
-router.post('/api/projects/import', ensureAuth, (req, res) => {
+router.post('/projects/import', ensureAuth, (req, res) => {
   const db = openDb();
   db.pragma('foreign_keys = ON'); // Sécurité : active les contraintes FK
   const userId = req.user.id;

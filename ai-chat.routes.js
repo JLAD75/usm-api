@@ -3,8 +3,8 @@ import { OpenAI } from "openai";
 
 const router = express.Router();
 
-// Endpoint POST /api/ai-chat : proxy OpenAI Responses API (stream)
-router.post("/api/ai-chat", async (req, res) => {
+// Endpoint POST /ai-chat : proxy OpenAI Responses API (stream)
+router.post("/ai-chat", async (req, res) => {
   const { prompt, openaiApiKey, history, tools, tool_choice, model } = req.body;
   if ((!prompt && !Array.isArray(history)) || !openaiApiKey) {
     return res

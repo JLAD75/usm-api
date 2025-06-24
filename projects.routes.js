@@ -13,7 +13,7 @@ function ensureAuth(req, res, next) {
 }
 
 // Liste des projets accessibles à l'utilisateur
-router.get('/api/projects', ensureAuth, (req, res) => {
+router.get('/projects', ensureAuth, (req, res) => {
   const db = openDb();
   const userId = req.user.id;
   const stmt = db.prepare(`
@@ -27,7 +27,7 @@ router.get('/api/projects', ensureAuth, (req, res) => {
 });
 
 // Création d'un projet
-router.post('/api/projects', ensureAuth, (req, res) => {
+router.post('/projects', ensureAuth, (req, res) => {
   const db = openDb();
   const userId = req.user.id;
   const { name, settings } = req.body;
@@ -48,7 +48,7 @@ router.post('/api/projects', ensureAuth, (req, res) => {
 });
 
 // Détail d'un projet (avec settings)
-router.get('/api/projects/:projectId', ensureAuth, (req, res) => {
+router.get('/projects/:projectId', ensureAuth, (req, res) => {
   const db = openDb();
   const userId = req.user.id;
   const { projectId } = req.params;
@@ -61,7 +61,7 @@ router.get('/api/projects/:projectId', ensureAuth, (req, res) => {
 });
 
 // Mise à jour d'un projet (nom, settings)
-router.put('/api/projects/:projectId', ensureAuth, (req, res) => {
+router.put('/projects/:projectId', ensureAuth, (req, res) => {
   const db = openDb();
   const userId = req.user.id;
   const { projectId } = req.params;
@@ -79,7 +79,7 @@ router.put('/api/projects/:projectId', ensureAuth, (req, res) => {
 });
 
 // Suppression d'un projet
-router.delete('/api/projects/:projectId', ensureAuth, (req, res) => {
+router.delete('/projects/:projectId', ensureAuth, (req, res) => {
   const db = openDb();
   const userId = req.user.id;
   const { projectId } = req.params;
@@ -95,14 +95,14 @@ router.delete('/api/projects/:projectId', ensureAuth, (req, res) => {
 });
 
 // --- Projet sélectionné par utilisateur ---
-router.get('/api/user/selected-project', ensureAuth, (req, res) => {
+router.get('/user/selected-project', ensureAuth, (req, res) => {
   const db = openDb();
   const userId = req.user.id;
   const row = db.prepare('SELECT selectedProjectId FROM users WHERE id = ?').get(userId);
   res.json({ selectedProjectId: row?.selectedProjectId || null });
 });
 
-router.put('/api/user/selected-project', ensureAuth, (req, res) => {
+router.put('/user/selected-project', ensureAuth, (req, res) => {
   const db = openDb();
   const userId = req.user.id;
   const { selectedProjectId } = req.body;

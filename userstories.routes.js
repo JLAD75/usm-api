@@ -15,7 +15,7 @@ function ensureAuth(req, res, next) {
 // Adapter toutes les requêtes à better-sqlite3 (synchrone)
 
 // Liste des user stories d'un projet
-router.get('/api/projects/:projectId/userstories', ensureAuth, (req, res) => {
+router.get('/projects/:projectId/userstories', ensureAuth, (req, res) => {
   const db = openDb();
   const userId = req.user.id;
   const { projectId } = req.params;
@@ -29,7 +29,7 @@ router.get('/api/projects/:projectId/userstories', ensureAuth, (req, res) => {
 });
 
 // Création d'une user story
-router.post('/api/projects/:projectId/userstories', ensureAuth, (req, res) => {
+router.post('/projects/:projectId/userstories', ensureAuth, (req, res) => {
   const db = openDb();
   const userId = req.user.id;
   const { projectId } = req.params;
@@ -49,7 +49,7 @@ router.post('/api/projects/:projectId/userstories', ensureAuth, (req, res) => {
 });
 
 // Mise à jour d'une user story
-router.put('/api/projects/:projectId/userstories/:storyId', ensureAuth, (req, res) => {
+router.put('/projects/:projectId/userstories/:storyId', ensureAuth, (req, res) => {
   const db = openDb();
   const userId = req.user.id;
   const { projectId, storyId } = req.params;
@@ -68,7 +68,7 @@ router.put('/api/projects/:projectId/userstories/:storyId', ensureAuth, (req, re
 });
 
 // Suppression d'une user story
-router.delete('/api/projects/:projectId/userstories/:storyId', ensureAuth, (req, res) => {
+router.delete('/projects/:projectId/userstories/:storyId', ensureAuth, (req, res) => {
   const db = openDb();
   const userId = req.user.id;
   const { projectId, storyId } = req.params;
