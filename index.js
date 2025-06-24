@@ -12,6 +12,7 @@ import { openDb } from "./db.js";
 import importExportRoutes from "./importexport.routes.js";
 import projectsRoutes from "./projects.routes.js";
 import userStoriesRoutes from "./userstories.routes.js";
+import mcpRoutes from "./mcp.routes.js";
 
 import chalk from "chalk";
 
@@ -99,28 +100,28 @@ app.post("/auth/logout", (req, res) => {
   req.logout(() => res.json({ success: true }));
 });
 
-app.get("/api/user", (req, res) => res.json(req.user || null));
+app.get("/user", (req, res) => res.json(req.user || null));
 
-app.get("/api/userstories", ensureAuth, (req, res) => {
+app.get("/userstories", ensureAuth, (req, res) => {
   const id = req.user.id;
   res.json(userStories.get(id) || []);
 });
 
-app.post("/api/userstories", ensureAuth, (req, res) => {
+app.post("/userstories", ensureAuth, (req, res) => {
   const id = req.user.id;
   userStories.set(id, req.body || []);
   res.json({ success: true });
 });
 
 // --- API thème utilisateur ---
-app.get("/api/user/theme", ensureAuth, (req, res) => {
+app.get("/user/theme", ensureAuth, (req, res) => {
   const db = openDb();
   const userId = req.user.id;
   const row = db.prepare("SELECT theme FROM users WHERE id = ?").get(userId);
   res.json({ theme: row?.theme || "system" });
 });
 
-app.put("/api/user/theme", ensureAuth, (req, res) => {
+app.put("/user/theme", ensureAuth, (req, res) => {
   const db = openDb();
   const userId = req.user.id;
   const { theme } = req.body;
@@ -132,14 +133,14 @@ app.put("/api/user/theme", ensureAuth, (req, res) => {
 });
 
 // --- Liste tous les utilisateurs (admin ou partage)
-app.get("/api/users", ensureAuth, (req, res) => {
+app.get("/users", ensureAuth, (req, res) => {
   const db = openDb();
   const users = db.prepare("SELECT id, email, displayName FROM users").all();
   res.json(users);
 });
 
 // Endpoint pour obtenir un JWT après login Google
-app.get("/api/token", ensureAuth, (req, res) => {
+app.get("/token", ensureAuth, (req, res) => {
   // On encode l'id, l'email et le displayName dans le token
   const payload = {
     id: req.user.id,
@@ -158,6 +159,7 @@ app.use(userStoriesRoutes);
 app.use(accessRoutes);
 app.use(importExportRoutes);
 app.use(aiChatRoutes);
+app.use(mcpRoutes);
 
 const PORT = process.env.PORT || 3000;
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
