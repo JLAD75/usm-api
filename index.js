@@ -19,7 +19,7 @@ import chalk from "chalk";
 const app = express();
 
 // CORS dynamique selon l'environnement
-const allowedOrigins = ["http://localhost:5173", "https://jladmin.fr", "https://api.jladmin.fr"];
+const allowedOrigins = ["http://localhost:5173", "https://jladmin.fr", "https://api.jladmin.fr","https://accounts.google.com"];
 app.use(
   cors({
     origin: (origin, callback) => {
