@@ -181,6 +181,30 @@ L'API supporte le streaming des réponses IA pour une meilleure expérience util
 - Gestion des timeouts
 - Gestion des erreurs robuste
 
+### Configuration nginx pour la production
+Pour que le streaming fonctionne correctement en production avec nginx, ajoutez cette configuration dans votre serveur nginx (dans Plesk, utilisez la zone "nginx configuration") :
+
+```nginx
+proxy_http_version 1.1;
+proxy_set_header Upgrade $http_upgrade;
+proxy_set_header Connection 'upgrade';
+proxy_set_header Host $host;
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
+proxy_cache_bypass $http_upgrade;
+
+# Configuration spécifique pour les EventSource (Server-Sent Events)
+proxy_buffering off;
+proxy_cache off;
+proxy_read_timeout 300s;
+proxy_send_timeout 300s;
+proxy_connect_timeout 75s;
+proxy_set_header Accept-Encoding "";
+```
+
+**Important :** Cette configuration doit être appliquée au domaine de l'API (ex: `api.votre-domaine.com`) et non au domaine principal du frontend.
+
 ## 🔧 Développement
 
 ### Scripts disponibles
