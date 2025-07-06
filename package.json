@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-	"sql": "npx node-gyp rebuild"
+    "dev": "SET NODE_ENV=development&& node index.js",
+    "sql": "npx node-gyp rebuild"
   },
   "dependencies": {
-	"@modelcontextprotocol/sdk": "^1.12.1",
+    "@modelcontextprotocol/sdk": "^1.12.1",
     "better-sqlite3": "^11.10.0",
     "concurrently": "^9.1.2",
     "cookie": "^1.0.2",
@@ -22,8 +23,7 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "sqlite": "^5.1.1",
-    "uuid": "^11.1.0"
-  },
-  "devDependencies": {
+    "uuid": "^11.1.0",
+    "zod": "^3.25.74"
   }
 }

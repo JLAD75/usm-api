@@ -19,12 +19,17 @@ import chalk from "chalk";
 const app = express();
 
 // CORS dynamique selon l'environnement
-const allowedOrigins = ["http://localhost:5173", "https://jladmin.fr", "https://api.jladmin.fr","https://accounts.google.com"];
+const isDevelopment = process.env.NODE_ENV !== "production";
+const allowedOrigins = isDevelopment 
+  ? ["http://localhost:5173", "http://localhost:3000", "https://accounts.google.com"]
+  : ["https://jladmin.fr", "https://api.jladmin.fr", "https://accounts.google.com"];
+
 app.use(
   cors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
       if (allowedOrigins.includes(origin)) return callback(null, true);
+      console.log(`CORS blocked origin: ${origin}`);
       return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
@@ -49,7 +54,9 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID || "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-      callbackURL: "/auth/google/callback",
+      callbackURL: process.env.NODE_ENV === "production" 
+        ? "https://api.jladmin.fr/auth/google/callback"
+        : "http://localhost:3000/auth/google/callback",
     },
     (_accessToken, _refreshToken, profile, done) => {
       done(null, profile);
@@ -175,6 +182,20 @@ app.use(mcpRoutes);
 
 const PORT = process.env.PORT || 3000;
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+
+// Vérification de la configuration en développement
+if (process.env.NODE_ENV !== "production") {
+  console.log(chalk.yellow("⚠️  Mode développement détecté"));
+  if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+    console.log(chalk.red("❌  Variables d'environnement Google manquantes !"));
+    console.log(chalk.yellow("📝  Créez un fichier .env dans usm-api/ avec :"));
+    console.log(chalk.cyan("   GOOGLE_CLIENT_ID=votre_client_id"));
+    console.log(chalk.cyan("   GOOGLE_CLIENT_SECRET=votre_client_secret"));
+    console.log(chalk.yellow("📖  Consultez DEVELOPMENT.md pour la configuration"));
+  } else {
+    console.log(chalk.green("✅  Configuration Google OAuth détectée"));
+  }
+}
 
 app.listen(PORT, () => {
   const sep = chalk.gray("──────────────────────────────────────────────");
